@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Discuss</string>
+    <string name="mangaAnime">Manga/Animé</string>
+    <string name="love">Amour</string>
+    <string name="videoGames">Jeux vidéo</string>
+    <string name="space">Espace</string>
+    <string name="culture">Culture</string>
+    <string name="music">Musique</string>
+    <string name="room_name">Nom du salon</string>
+    <string name="done">Fait</string>
+    <string name="cancel">Annuler</string>
+    <string name="keep_name">Garder ce nom</string>
+    <string name="who_are_you">Qui es-tu ?</string>
+    <string name="help">A l\'aide !</string>
+    <string name="rooms">Salons</string>
+    <string name="chat">Chat</string>
+    <string name="create_room">Créer un salon</string>
+    <string name="search_a_subject">Chercher un sujet…</string>
+    <string name="enter_name">Entrez votre nom</string>
+    <string name="failed_connection">Connexion échouée</string>
+    <string name="failed_connection_description">Impossible de se connecter au serveur. Vérifie ta connexion internet. ^^</string>
+    <string name="type_message">Ecrit un message</string>
+    <string name="subjects">Sujets</string>
+    <string name="need_help">J\'ai besoin de ton aide !</string>
+    <string name="help_desc">Salut ! Comme tu peux le voir, il n\'y a pas beaucoup de personnes ici.</string>
+    <string name="setting_icon">Icone paramètre</string>
+    <string name="send_icon">icone envoyer</string>
+    <string name="back_button_icon">icone bouton retour</string>
+    <string name="background_image">image du fond</string>
+    <string name="heart_icon">icone coeur</string>
+    <string name="name_taken_error">Nom pris :c</string>
+    <string name="create_icon">icone créer</string>
+    <string name="enter_room_name">Entrez le nom du salon…</string>
+    <string name="user_has_joined">%1$s  a rejoint le salon.</string>
+    <string name="user_has_left">%1$s a quitté le salon.</string>
+    <string name="user_kicked">%1$s s\'est fait éjecté du salon.</string>
+    <string name="user_new_host">%1$s est maintenant le chef du salon.</string>
+    <string name="please_enter_name">Entrez un nom, s\'il vous plait</string>
+    <string name="got_kicked">Tu as été ejecté du salon.</string>
+    <string name="alright">Ok…</string>
+    <string name="kick">Exclure</string>
+    <string name="reply">Répondre</string>
+    <string name="icon_desc">icone utilisatuer</string>
+    <string name="discuss_desc">icone discuss</string>
+</resources>

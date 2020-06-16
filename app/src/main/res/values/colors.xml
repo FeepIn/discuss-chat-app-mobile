@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">#530008</color>
+    <color name="green">#00655E</color>
+    <color name="grey">#ECECEC</color>
+    <color name="violet">#471141</color>
+    <color name="blue">#1567AB</color>
+    <color name="violet_blue">#4C46C7</color>
+    <color name="belgium">#FFF9F1</color>
+</resources>

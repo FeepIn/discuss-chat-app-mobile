@@ -1,0 +1,16 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/green</item>
+    </style>
+    <style name="fontChelsea">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:fontFamily">@font/chelsea</item>
+    </style>
+
+    <style name="EnterDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/overshootlike_car</item>
+    </style>
+
+</resources>
