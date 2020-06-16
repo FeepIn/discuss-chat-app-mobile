@@ -15,6 +15,7 @@ public class ContextMenuListAdapter extends BaseAdapter {
     private Context context;
     private String [] strings;
     private LayoutInflater layoutInflater;
+
     public ContextMenuListAdapter(Context context, OnItemClicked onItemClicked){
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
@@ -63,6 +64,8 @@ public class ContextMenuListAdapter extends BaseAdapter {
         return convertView;
     }
 
+
+    //Intefaces
     public interface OnItemClicked{
         void clicked(View v, String itemText);
     }

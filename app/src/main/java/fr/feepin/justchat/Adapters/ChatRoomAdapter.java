@@ -6,7 +6,6 @@ import android.graphics.Point;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.ScaleAnimation;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,6 +41,8 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         this.contextMenuView = contextMenuView;
         this.onContextMenuOpen = onContextMenuOpen;
         this.container = container;
+
+        //Get viewport size
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -59,7 +59,6 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         this.parent = parent;
-
         return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.chat_list_item, parent, false));
     }
 
@@ -69,7 +68,6 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
 
         if (user.getName().equals("System")){
             holder.nameView.setTextColor(context.getResources().getColor(R.color.black));
-
 
             SpannableString spannableString = new SpannableString(user.getMessage());
             ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.parseColor(user.getColor()));
@@ -88,8 +86,6 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         if (user.isHost()){
             holder.nameView.setCompoundDrawablesWithIntrinsicBounds(null,null, context.getResources().getDrawable(R.drawable.crown), null);
         }
-
-
     }
 
     @Override
@@ -97,20 +93,22 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         return this.users.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener, GestureDetector.OnGestureListener {
-
+    public class ViewHolder extends RecyclerView.ViewHolder implements
+            View.OnTouchListener,
+            GestureDetector.OnGestureListener {
         public View root;
         public TextView nameView;
         public TextView messageView;
         private GestureDetector gestureDetector;
+
         public ViewHolder(@NonNull View root) {
             super(root);
             this.root = root;
             this.nameView = root.findViewById(R.id.userName);
             this.messageView = root.findViewById(R.id.message);
             this.root.setOnTouchListener(this);
-            gestureDetector = new GestureDetector(context, this);
 
+            gestureDetector = new GestureDetector(context, this);
         }
 
 
@@ -204,6 +202,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         }
     }
 
+    //Interfaces
     public interface OnContextMenuOpen{
         void onOpen(TextView nameView, View root);
     }

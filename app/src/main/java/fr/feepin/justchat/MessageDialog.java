@@ -1,6 +1,5 @@
 package fr.feepin.justchat;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -19,21 +18,20 @@ import com.eightbitlab.supportrenderscriptblur.SupportRenderScriptBlur;
 import eightbitlab.com.blurview.BlurView;
 
 public class MessageDialog extends AlertDialog {
-
     private BlurView blurView;
     private ViewGroup root;
     private Context context;
+
     public MessageDialog(Context context, String message) {
         super(context);
         this.context = context;
+
         setCancelable(true);
         root = getWindow().getDecorView().findViewById(android.R.id.content);
-
-
         LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-
         View dialogView = layoutInflater.inflate(R.layout.message_dialog, root, false);
+
         TextView messageView = dialogView.findViewById(R.id.message);
         messageView.setText(message);
 
@@ -46,12 +44,11 @@ public class MessageDialog extends AlertDialog {
             }
         });
 
+        //Removing default background overlay
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         setView(dialogView);
-
-
     }
 
     @Override

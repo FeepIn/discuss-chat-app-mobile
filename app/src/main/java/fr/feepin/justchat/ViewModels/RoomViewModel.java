@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
@@ -26,28 +25,16 @@ public class RoomViewModel extends AndroidViewModel {
 
     public RoomViewModel(@NonNull Application application) {
         super(application);
+
+        //Inits
         userCount = new MutableLiveData<>();
         newHost = new MutableLiveData<>();
-        newHost.setValue(Shared.hostname);
         message = new MutableLiveData<>();
         hasBeenKicked = new MutableLiveData<>();
         socket = Shared.socket;
-    }
 
-    public MutableLiveData<Boolean> getHasBeenKicked() {
-        return hasBeenKicked;
-    }
+        newHost.setValue(Shared.hostname);
 
-    public MutableLiveData<String> getNewHost() {
-        return newHost;
-    }
-
-    public MutableLiveData<User> getMessage() {
-        return message;
-    }
-
-    public MutableLiveData<Integer> getUserCount() {
-        return userCount;
     }
 
     public void removeListeners(){
@@ -57,7 +44,6 @@ public class RoomViewModel extends AndroidViewModel {
         socket.off("userKicked", userKickedListener);
         socket.off("newHost", newHostListener);
         socket.off("kicked", kickedListener);
-
     }
 
     public void setupSocketListeners(){
@@ -70,6 +56,7 @@ public class RoomViewModel extends AndroidViewModel {
                 .on("roomLeft", kickedListener);
     };
 
+    //Listeners
     private Emitter.Listener userKickedListener = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
@@ -162,19 +149,36 @@ public class RoomViewModel extends AndroidViewModel {
         @Override
         public void call(final Object... args) {
 
-                    JSONObject datas = (JSONObject)args[0];
-                    try {
+            JSONObject datas = (JSONObject)args[0];
+            try {
 
-                        String message = datas.getString("message");
-                        String userName = datas.getString("userName");
+                String message = datas.getString("message");
+                String userName = datas.getString("userName");
 
-                        getMessage().postValue(new User(userName, getNewHost().getValue().equals(userName), message.trim(), datas.getString("color")));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                getMessage().postValue(new User(userName, getNewHost().getValue().equals(userName), message.trim(), datas.getString("color")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
 
         }
     };
 
+    //Getters
+
+    public MutableLiveData<Boolean> getHasBeenKicked() {
+        return hasBeenKicked;
+    }
+
+    public MutableLiveData<String> getNewHost() {
+        return newHost;
+    }
+
+    public MutableLiveData<User> getMessage() {
+        return message;
+    }
+
+    public MutableLiveData<Integer> getUserCount() {
+        return userCount;
+    }
 }

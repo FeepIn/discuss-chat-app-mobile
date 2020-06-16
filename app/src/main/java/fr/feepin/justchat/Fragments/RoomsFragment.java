@@ -1,21 +1,15 @@
 package fr.feepin.justchat.Fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,21 +19,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.invoke.MethodType;
 
 import fr.feepin.justchat.Adapters.RoomListAdapter;
 import fr.feepin.justchat.MainActivity;
@@ -50,7 +37,6 @@ import fr.feepin.justchat.ViewModels.RoomsViewModel;
 import fr.feepin.justchat.models.RoomDetails;
 
 public class RoomsFragment extends Fragment {
-
     Socket socket;
     JSONObject datas;
     RequestQueue requestQueue;
@@ -61,7 +47,7 @@ public class RoomsFragment extends Fragment {
     public RoomsFragment(){
         setRetainInstance(true);
 
-        Shared.wasOn ="rooms";
+        //Setting back button
         this.appCompatActivity = Shared.appCompatActivity;
         ((MainActivity)appCompatActivity).setOnBackButtonPressed(new MainActivity.OnBackButtonPressed() {
             @Override
@@ -69,9 +55,12 @@ public class RoomsFragment extends Fragment {
                 exitFragment();
             }
         });
+
+        //Getting shared objects
         requestQueue = Shared.requestQueue;
         socket = Shared.socket;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

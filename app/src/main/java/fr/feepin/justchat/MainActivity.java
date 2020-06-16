@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -26,28 +25,35 @@ import android.widget.ProgressBar;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import fr.feepin.justchat.Fragments.RoomsFragment;
 import fr.feepin.justchat.Fragments.SubjectsFragment;
 import fr.feepin.justchat.ViewModels.MainViewModel;
 
 
 public class MainActivity extends AppCompatActivity {
-
     FrameLayout frameLayout;
-    RoomsFragment roomsFragment;
-    SubjectsFragment subjectsFragment;
     Database database;
     RequestQueue requestQueue;
     ProgressBar progressBar;
     ImageView appIconView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
+        //Inits
         requestQueue = Volley.newRequestQueue(this);
         database = new Database(this);
+        //Init emojicompat
+        EmojiCompat.Config config = new BundledEmojiCompatConfig(this)
+                .setReplaceAll(true);
+        EmojiCompat.init(config);
+
+        //Setting shared objects
+        Shared.database = database;
         Shared.requestQueue = requestQueue;
+        Shared.wasOn = "";
+        Shared.appCompatActivity = this;
+
+        //ViewModels
         final MainViewModel mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         mainViewModel.getDataReceived().observe(this, new Observer<Boolean>() {
             @Override
@@ -62,29 +68,21 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 }
-
             }
         });
 
-        Shared.wasOn = "";
-        Shared.appCompatActivity = this;
-        frameLayout  = findViewById(R.id.frameLayout);
-        super.onCreate(savedInstanceState);
-        EmojiCompat.Config config = new BundledEmojiCompatConfig(this)
-                .setReplaceAll(true);
-        EmojiCompat.init(config);
         setContentView(R.layout.activity_main);
-
-        frameLayout = findViewById(R.id.frameLayout);
-
-        Shared.database = database;
-
+        //Getting views
+        frameLayout  = findViewById(R.id.frameLayout);
         progressBar = findViewById(R.id.progress);
-
-
-
         appIconView = findViewById(R.id.discussIcon);
+
+        //App Icon animation setting
+        final AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+        alphaAnimation.setDuration(500);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.fading_in_from_top);
+
+        //Anim listeners
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -94,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 progressBar.setVisibility(View.VISIBLE);
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
-                alphaAnimation.setDuration(500);
                 progressBar.startAnimation(alphaAnimation);
                 mainViewModel.requestDatas();
             }
@@ -105,13 +101,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
         appIconView.startAnimation(animation);
-
-
     }
 
-
     private OnBackButtonPressed onBackButtonPressed;
+
+    public void setOnBackButtonPressed(OnBackButtonPressed onBackButtonPressed) {
+        this.onBackButtonPressed = onBackButtonPressed;
+    }
 
     @Override
     public void onBackPressed() {
@@ -120,20 +118,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setOnBackButtonPressed(OnBackButtonPressed onBackButtonPressed) {
-        this.onBackButtonPressed = onBackButtonPressed;
-    }
-
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
     private void setFragment(Fragment fragment){
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
@@ -152,8 +137,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void connectionFailed(final OnRetryButtonClick onRetryButtonClick){
-        Log.i("SOCKET", "failed");
-        View root = getLayoutInflater().inflate(R.layout.dialog_conneciton_failed, (ViewGroup)getWindow().getDecorView().findViewById(android.R.id.content), false);
+        View root = getLayoutInflater().inflate(R.layout.dialog_conneciton_failed,
+                (ViewGroup)getWindow().getDecorView().findViewById(android.R.id.content),
+                false);
+
         final AlertDialog dialog = new AlertDialog.Builder(this).setView(root).create();
 
         Button retryButton = root.findViewById(R.id.retryBtn);
@@ -175,10 +162,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         dialog.show();
-
     }
 
-
+    //Intefaces
     public interface OnRetryButtonClick{
         void clicked();
     }

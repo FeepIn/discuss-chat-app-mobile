@@ -1,10 +1,7 @@
 package fr.feepin.justchat.ViewModels;
 
 import android.util.Log;
-import android.view.View;
 
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -15,7 +12,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
-import fr.feepin.justchat.Fragments.SubjectsFragment;
 import fr.feepin.justchat.Shared;
 
 public class MainViewModel extends ViewModel {
@@ -26,7 +22,6 @@ public class MainViewModel extends ViewModel {
     }
 
     public void requestDatas(){
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "https://discuss-chatapp.com/rooms", null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -44,7 +39,6 @@ public class MainViewModel extends ViewModel {
                     }
                 }
         );
-
         Shared.requestQueue.add(jsonObjectRequest);
     }
 

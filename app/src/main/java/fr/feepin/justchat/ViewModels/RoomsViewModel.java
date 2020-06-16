@@ -3,10 +3,8 @@ package fr.feepin.justchat.ViewModels;
 import android.app.Application;
 import android.widget.Toast;
 
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -17,13 +15,9 @@ import com.github.nkzawa.emitter.Emitter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import fr.feepin.justchat.Fragments.RoomFragment;
-import fr.feepin.justchat.Fragments.RoomsFragment;
 import fr.feepin.justchat.MainActivity;
-import fr.feepin.justchat.R;
 import fr.feepin.justchat.Shared;
 
-import static fr.feepin.justchat.Shared.socket;
 
 public class RoomsViewModel extends AndroidViewModel {
 
@@ -33,6 +27,8 @@ public class RoomsViewModel extends AndroidViewModel {
 
     public RoomsViewModel(Application application){
         super(application);
+
+        //Inits
         datas = new MutableLiveData<>();
         hostName = new MutableLiveData<>();
         userCount = new MutableLiveData<>();
@@ -40,16 +36,7 @@ public class RoomsViewModel extends AndroidViewModel {
         requestDatas();
     }
 
-    public MutableLiveData<JSONObject> getDatas() {
-        return datas;
-    }
-
-    public MutableLiveData<Integer> getUserCount() {
-        return userCount;
-    }
-
     public void requestDatas(){
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "https://discuss-chatapp.com/rooms", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -89,7 +76,12 @@ public class RoomsViewModel extends AndroidViewModel {
             }
         });
     }
-
+    public MutableLiveData<JSONObject> getDatas() {
+        return datas;
+    }
+    public MutableLiveData<Integer> getUserCount() {
+        return userCount;
+    }
     public MutableLiveData<String> getHostName() {
         return hostName;
     }

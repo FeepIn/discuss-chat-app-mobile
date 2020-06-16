@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+//View that constraint ratio to be 1:1
 public class GridViewRoomItem extends ConstraintLayout {
 
     public GridViewRoomItem(Context context) {

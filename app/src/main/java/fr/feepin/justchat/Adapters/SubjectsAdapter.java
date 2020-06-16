@@ -1,19 +1,12 @@
 package fr.feepin.justchat.Adapters;
 
-import android.animation.TimeInterpolator;
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Interpolator;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.OvershootInterpolator;
+
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -23,10 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import eightbitlab.com.blurview.BlurView;
-import eightbitlab.com.blurview.RenderScriptBlur;
 import fr.feepin.justchat.R;
 import fr.feepin.justchat.Shared;
 import fr.feepin.justchat.models.Subject;
@@ -35,17 +25,13 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
     private Context context;
     public ArrayList<Subject> subjects, subjectsFull;
     private OnSubjectClick onSubjectClick;
+
     public SubjectsAdapter(Context context, ArrayList<Subject> subjects, OnSubjectClick onSubjectClick){
         this.context = context;
         this.subjects = subjects;
         this.subjectsFull = new ArrayList<>();
         this.subjectsFull.addAll(subjects);
         this.onSubjectClick = onSubjectClick;
-        adjustPositioning();
-    }
-
-    private void adjustPositioning(){
-
     }
 
     @NonNull
@@ -82,16 +68,15 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
                 subjectName = "null";
                 break;
         }
+
         holder.backgroundImage.setImageDrawable(subject.getBackgroundImg());
         holder.userCount.setText(subject.getUserCount()+"");
         holder.subject.setText(subjectName);
         holder.heartIcon.setImageDrawable(subject.isLiked() ? context.getResources().getDrawable(R.drawable.liked_heart_icon) : context.getResources().getDrawable(R.drawable.unliked_heart_icon));
-
         holder.heartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(subject.isLiked()){
-
                     subject.setLiked(false);
                     holder.heartIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.unliked_heart_icon));
                     Shared.database.deleteSubject(subject.getName());
@@ -100,9 +85,7 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
                     subject.setLiked(true);
                     holder.heartIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.liked_heart_icon));
                     Shared.database.insertSubject(subject.getName(), true);
-
                 }
-
             }
         });
 

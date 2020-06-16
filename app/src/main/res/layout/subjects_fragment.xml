@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_constraintWidth_percent="1"
+    android:background="@color/white"
     tools:context=".Fragments.SubjectsFragment"
     android:id="@+id/fragment"
     >

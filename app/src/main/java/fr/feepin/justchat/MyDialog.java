@@ -2,16 +2,10 @@ package fr.feepin.justchat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +13,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -43,18 +36,26 @@ public class MyDialog extends AlertDialog {
         activity = (Activity)context;
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dialog, (ViewGroup)activity.findViewById(R.id.fragment), false);
+
+        //Getting views
         titleView = view.findViewById(R.id.dialogTitle);
         cancelView = view.findViewById(R.id.dialogCancelButton);
         doneView = view.findViewById(R.id.dialogCaDoneButton);
         editText = view.findViewById(R.id.dialogEditText);
         textInputLayout= view.findViewById(R.id.textInputLayout2);
+
+        //Setting views
         textInputLayout.setHint(hint);
         titleView.setText(title);
         cancelView.setText(cancelLable);
         doneView.setText(doneLabel);
+
+        //Removing default dialog background overlay
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
+        //Setting new dialog background
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         setCancelable(false);
 
         setView(view);
@@ -65,9 +66,6 @@ public class MyDialog extends AlertDialog {
         textInputLayout.setError(errorMessage.trim());
     }
 
-
-
-
     private void blurEffect(){
         final BlurView blurView = activity.findViewById(R.id.blur);
         blurView.setupWith((ViewGroup)activity.findViewById(R.id.fragment))
@@ -75,6 +73,8 @@ public class MyDialog extends AlertDialog {
                 .setBlurAlgorithm(new RenderScriptBlur(getContext()));
         blurView.setEnabled(true);
         blurView.setVisibility(View.VISIBLE);
+
+        //Remove blur on dismiss
         setOnDismissListener(new OnDismissListener() {
 
             @Override
@@ -87,6 +87,7 @@ public class MyDialog extends AlertDialog {
 
     }
 
+    //Listeners
     public void setOnSubmitListener(final OnSubmitListener onSubmitListener){
         doneView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +119,8 @@ public class MyDialog extends AlertDialog {
         blurView.setEnabled(false);
     }
 
+
+    //Interface
     public interface OnSubmitListener{
         public void dismiss(String input);
         public void cancel(String input);

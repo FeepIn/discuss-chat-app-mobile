@@ -32,7 +32,7 @@ public class Database extends SQLiteOpenHelper {
 
     public void insertSubject(String name, boolean liked){
         int numLiked = liked ? 1 : 0;
-        String sql = "INSERT INTO subjects (name, liked) values ('"+name+"', "+numLiked+")";
+        String sql = "INSERT INTO subjects (name, liked) VALUES ('"+name+"', "+numLiked+")";
         this.getWritableDatabase().execSQL(sql);
     }
 
@@ -43,16 +43,15 @@ public class Database extends SQLiteOpenHelper {
 
     public HashMap<String, Boolean> getFavoriteSubjects(){
         HashMap<String, Boolean> subjects = new HashMap<>();
+
+        //Get cursor
         Cursor cursor = getReadableDatabase().rawQuery("SELECT name, liked FROM subjects", null);
 
         while (!cursor.isLast()){
             cursor.moveToNext();
             subjects.put(cursor.getString(0), cursor.getInt(1) == 1 );
-
         }
         cursor.close();
-
         return subjects;
     }
-
 }

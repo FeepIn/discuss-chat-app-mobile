@@ -1,14 +1,11 @@
 package fr.feepin.justchat.Fragments;
 
-import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,12 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
-import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONString;
-import org.json.JSONStringer;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -43,25 +36,32 @@ import fr.feepin.justchat.Database;
 import fr.feepin.justchat.MainActivity;
 import fr.feepin.justchat.MyDialog;
 import fr.feepin.justchat.R;
-import fr.feepin.justchat.Adapters.RoomListAdapter;
 import fr.feepin.justchat.Shared;
 import fr.feepin.justchat.models.Subject;
 
 public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubjectClick {
     private Drawable[]backgroundImgs;
     private HashMap<String, Boolean> preference;
-    private JSONObject datas;
     private ArrayList<Subject> subjects;
+
+    private JSONObject datas;
     private Database database;
-    private RecyclerView subjectRecycler;
     private Socket socket;
+
+    private RecyclerView subjectRecycler;
     private SearchView searchView;
-    private SubjectsAdapter subjectsAdapter;
     private TextView title;
+
+    private SubjectsAdapter subjectsAdapter;
+
     private AppCompatActivity appCompatActivity;
+
     private MyDialog myDialog;
+
     public SubjectsFragment() {
         setRetainInstance(false);
+
+        //Back button listener
         this.appCompatActivity = Shared.appCompatActivity;
         ((MainActivity)appCompatActivity).setOnBackButtonPressed(new MainActivity.OnBackButtonPressed() {
             @Override
@@ -69,9 +69,13 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
                 appCompatActivity.finish();
             }
         });
+
+        //Inits
         subjects = new ArrayList<>();
         this.datas = Shared.datas;
         this.database = Shared.database;
+
+        //Connect to socket
         try {
             this.socket = IO.socket("https://discuss-chatapp.com/");
         } catch (URISyntaxException e) {
@@ -80,39 +84,31 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
 
         this.socket.connect();
         Shared.socket = this.socket;
-
     }
-
-
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.subjects_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         initSubjectList(view);
-
-
 
         if(Shared.theme == null && Shared.userName == null && myDialog == null){
             askForName(false);
         }
 
         title = view.findViewById(R.id.subjects);
-
         setupEditText();
-
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
+        //Socket listeners
         socket.on("nameTaken", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -138,12 +134,13 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
     }
 
     private void setupEditText(){
-        searchView = (SearchView)getView().findViewById(R.id.textInputLayout);
+        searchView = getView().findViewById(R.id.textInputLayout);
 
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 title.setVisibility(View.VISIBLE);
+                title.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_to_right));
                 return false;
             }
 
@@ -152,9 +149,11 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                title.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_to_right));
                 title.setVisibility(View.INVISIBLE);
             }
         });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -166,18 +165,17 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
                 subjectsAdapter.getFilter().filter(newText);
                 return true;
             }
-
         });
     }
 
     private void askForName(final boolean changeName){
         myDialog = new MyDialog(getContext(), getResources().getString(R.string.who_are_you), getResources().getString(R.string.cancel), getResources().getString(R.string.done), getResources().getString(R.string.enter_name));
         myDialog.setOnSubmitListener(new MyDialog.OnSubmitListener() {
+
             @Override
             public void dismiss(String input) {
                 Shared.userName = "Anonymous";
                 socket.emit(changeName ? "changeName" :"name", "Anonymous");
-
             }
 
             @Override
@@ -196,9 +194,10 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
                 }
             }
         });
+
+        //Changing entering animation
         myDialog.getWindow().getAttributes().windowAnimations = R.style.EnterDialogAnimation;
         myDialog.show();
-
     }
 
     private void initSubjectList(View view){
@@ -210,6 +209,7 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
                 getResources().getDrawable(R.drawable.culture),
                 getResources().getDrawable(R.drawable.music)
         };
+
         preference = database.getFavoriteSubjects();
         setupSubjects();
 
@@ -225,25 +225,20 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
 
     private void setupSubjects(){
         int index = 0;
-
         for (Iterator<String> it = datas.keys(); it.hasNext(); ) {
-
             String subject = it.next();
-
-
             try {
-
                 subjects.add(new Subject(subject, preference.containsKey(subject), datas.getJSONObject(subject).getInt("userCount"), backgroundImgs[index], 0, 0));
             } catch (JSONException e) {
 
             }
-
             index++;
         }
 
         sortSubjects();
     }
 
+    //Sort according to preferences
     private void sortSubjects(){
         ArrayList<Subject>sortedList = new ArrayList<>();
         HashMap<String, Boolean> preference = database.getFavoriteSubjects();
@@ -263,12 +258,9 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
     @Override
     public void clicked(String subjectName) {
         Shared.theme = subjectName;
-
         FragmentTransaction fragmentTransaction = appCompatActivity.getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.replace(R.id.frameLayout, new RoomsFragment());
         fragmentTransaction.commit();
-
-
     }
 }

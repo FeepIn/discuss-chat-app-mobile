@@ -3,7 +3,6 @@ package fr.feepin.justchat.Fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,18 +24,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONString;
 
 import java.util.ArrayList;
 
 import fr.feepin.justchat.Adapters.ChatRoomAdapter;
 import fr.feepin.justchat.Adapters.ContextMenuListAdapter;
-import fr.feepin.justchat.Adapters.RoomListAdapter;
 import fr.feepin.justchat.MainActivity;
 import fr.feepin.justchat.MessageDialog;
 import fr.feepin.justchat.R;
@@ -52,6 +46,7 @@ public class RoomFragment extends Fragment implements ContextMenuListAdapter.OnI
     private RecyclerView recyclerView;
     private ChatRoomAdapter chatRoomAdapter;
     private AppCompatActivity appCompatActivity;
+
     private EmojiEditText emojiEditText;
     private ImageView sendButtonView;
     private ImageView settingIconView;
@@ -75,7 +70,6 @@ public class RoomFragment extends Fragment implements ContextMenuListAdapter.OnI
         this.socket = Shared.socket;
         this.users = new ArrayList<>();
         this.hostName = Shared.hostname;
-
     }
 
     public RoomViewModel roomViewModel;
@@ -134,7 +128,6 @@ public class RoomFragment extends Fragment implements ContextMenuListAdapter.OnI
         contextMenuListView = contextMenuView.findViewById(R.id.contextList);
         contextMenuListView.setAdapter(new ContextMenuListAdapter(getContext(), this));
 
-
         return root;
     }
 
@@ -151,15 +144,9 @@ public class RoomFragment extends Fragment implements ContextMenuListAdapter.OnI
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 exitFragment();
-
             }
         });
-
-
-
 
         emojiEditText = view.findViewById(R.id.chatEditText);
         sendButtonView = view.findViewById(R.id.sendButton);
@@ -185,9 +172,6 @@ public class RoomFragment extends Fragment implements ContextMenuListAdapter.OnI
             }
         });
 
-
-
-
         final ConstraintLayout constraintLayout = view.findViewById(R.id.root);
 
         sendButtonView.setOnClickListener(new View.OnClickListener() {
@@ -201,8 +185,6 @@ public class RoomFragment extends Fragment implements ContextMenuListAdapter.OnI
                 if (!chatRoomAdapter.users.isEmpty())
                 recyclerView.smoothScrollToPosition(chatRoomAdapter.users.size()-1);
                 emojiEditText.setText("");
-
-
             }
         });
 
@@ -212,21 +194,16 @@ public class RoomFragment extends Fragment implements ContextMenuListAdapter.OnI
         if (emojiEditText.isFocused())hideKeyboard(getActivity());
 
         roomViewModel.removeListeners();
+
         socket.emit("userLeft", new JSONObject());
+
         FragmentTransaction fragmentTransaction = appCompatActivity.getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
         fragmentTransaction.replace(R.id.frameLayout, new RoomsFragment());
-
         fragmentTransaction.commit();
     }
 
     Activity activity;
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-    }
 
     public static void hideKeyboard(Activity activity) {
         View v = activity.getCurrentFocus();
@@ -239,11 +216,9 @@ public class RoomFragment extends Fragment implements ContextMenuListAdapter.OnI
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.activity = getActivity();
-
     }
 
     String selectedUserName;
-
 
     @Override
     public void clicked(View v, String itemText) {

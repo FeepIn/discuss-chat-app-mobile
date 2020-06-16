@@ -50,7 +50,6 @@ public class Subject {
         this.backgroundImg = backgroundImg;
     }
 
-
     public float getTranslationX() {
         return translationX;
     }
