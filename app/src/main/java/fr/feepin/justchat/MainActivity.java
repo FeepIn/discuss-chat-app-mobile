@@ -1,5 +1,7 @@
 package fr.feepin.justchat;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.emoji.bundled.BundledEmojiCompatConfig;
@@ -9,9 +11,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -103,6 +107,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         appIconView.startAnimation(animation);
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        if (Shared.userName != null) {
+            Shared.socket.emit("name", Shared.userName);
+        }
+        super.onStart();
     }
 
     private OnBackButtonPressed onBackButtonPressed;

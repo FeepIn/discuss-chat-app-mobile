@@ -67,6 +67,7 @@ public class RoomViewModel extends AndroidViewModel {
                 User user = new User("System", false, getApplication().getResources().getString(R.string.user_kicked, userName), colorHex);
                 user.setUserJoined(userName);
                 getMessage().postValue(user);
+                getUserCount().postValue(jsonObject.getInt("userCount"));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -112,6 +113,7 @@ public class RoomViewModel extends AndroidViewModel {
                 String colorHex = jsonObject.getString("color");
                 final User user = new User("System", false, getApplication().getString(R.string.user_has_left, userName), colorHex);
                 user.setUserJoined(userName);
+                userCount.postValue(jsonObject.getInt("userCount"));
                 getMessage().postValue(user);
 
             } catch (JSONException e) {
@@ -121,6 +123,7 @@ public class RoomViewModel extends AndroidViewModel {
 
         }
     };
+
 
     private Emitter.Listener newUserListener = new Emitter.Listener() {
         @Override

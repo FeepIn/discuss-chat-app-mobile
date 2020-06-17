@@ -74,6 +74,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
 
             spannableString.setSpan(foregroundColorSpan, 0, user.getUserJoined().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.nameView.setText(spannableString);
+            holder.messageView.setText("");
             ((ViewGroup)holder.root).removeView(holder.messageView);
 
             return;
@@ -137,7 +138,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
 
         @Override
         public void onLongPress(MotionEvent e) {
-            if (!Shared.hostname.equals(Shared.userName)){
+            if (!Shared.hostname.equals(Shared.userName) || messageView.getText().equals("")){
                 return;
             }
             container.removeView(contextMenuView);
@@ -193,7 +194,6 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
             if (event.getAction() == MotionEvent.ACTION_DOWN && selectedView !=null){
                 container.removeView(contextMenuView);
                 selectedView.setBackgroundColor(context.getResources().getColor(R.color.belgium));
-
             }
 
             gestureDetector.onTouchEvent(event);

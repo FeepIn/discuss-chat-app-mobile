@@ -15,6 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +40,7 @@ import fr.feepin.justchat.MainActivity;
 import fr.feepin.justchat.MyDialog;
 import fr.feepin.justchat.R;
 import fr.feepin.justchat.Shared;
+import fr.feepin.justchat.ViewModels.SubjectsViewModel;
 import fr.feepin.justchat.models.Subject;
 
 public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubjectClick {
@@ -57,6 +61,7 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
     private AppCompatActivity appCompatActivity;
 
     private MyDialog myDialog;
+
 
     public SubjectsFragment() {
         setRetainInstance(false);
@@ -86,17 +91,37 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
         Shared.socket = this.socket;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        myDialog = new MyDialog(getContext(), getResources().getString(R.string.who_are_you), getResources().getString(R.string.cancel), getResources().getString(R.string.done), getResources().getString(R.string.enter_name));
+        SubjectsViewModel subjectsViewModel = new ViewModelProvider(requireActivity()).get(SubjectsViewModel.class);
+        subjectsViewModel.getNameTaken().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                myDialog.setErrorMessage(getResources().getString(R.string.name_taken_error));
+            }
+        });
+        subjectsViewModel.getConnected().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                myDialog.dismiss();
+            }
+        });
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.subjects_fragment, container, false);
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initSubjectList(view);
 
-        if(Shared.theme == null && Shared.userName == null && myDialog == null){
+        if(Shared.theme == null && Shared.userName == null){
             askForName(false);
         }
 
@@ -108,29 +133,7 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
     public void onStart() {
         super.onStart();
 
-        //Socket listeners
-        socket.on("nameTaken", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        myDialog.setErrorMessage(getResources().getString(R.string.name_taken_error));
-                    }
-                });
 
-            }
-        }).on("connected", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        myDialog.dismiss();
-                    }
-                });
-            }
-        });
     }
 
     private void setupEditText(){
@@ -169,7 +172,6 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
     }
 
     private void askForName(final boolean changeName){
-        myDialog = new MyDialog(getContext(), getResources().getString(R.string.who_are_you), getResources().getString(R.string.cancel), getResources().getString(R.string.done), getResources().getString(R.string.enter_name));
         myDialog.setOnSubmitListener(new MyDialog.OnSubmitListener() {
 
             @Override
