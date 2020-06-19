@@ -42,5 +42,7 @@
     <string name="reply">Reply</string>
     <string name="icon_desc">User icon</string>
     <string name="discuss_desc">discuss icon</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
