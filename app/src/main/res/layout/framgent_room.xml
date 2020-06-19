@@ -62,7 +62,7 @@
         />-->
 
     <androidx.recyclerview.widget.RecyclerView
-        tools:listitem="@layout/chat_list_item"
+        tools:listitem="@layout/item_chat_list"
         tools:itemCount="5"
         android:focusable="true"
         android:background="@color/belgium"
