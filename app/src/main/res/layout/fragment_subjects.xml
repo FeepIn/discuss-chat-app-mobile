@@ -6,33 +6,9 @@
     android:layout_height="match_parent"
     app:layout_constraintWidth_percent="1"
     android:background="@color/white"
-    tools:context=".Fragments.SubjectsFragment"
-    android:id="@+id/fragment"
+    tools:context=".fragments.SubjectsFragment"
+    android:id="@+id/root"
     >
-
-    <androidx.appcompat.widget.SearchView
-        android:background="@color/white"
-        app:queryHint="@string/search_a_subject"
-        android:id="@+id/textInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/subjects"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="@string/subjects"
-        android:fontFamily="@font/chelsea"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/textInputLayout"
-        app:layout_constraintRight_toRightOf="parent"
-        />
 
     <!--
      <ImageView
@@ -49,21 +25,17 @@
 
         />
      -->
-
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_height="0dp"
         app:layout_constrainedHeight="true"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/subjectsRecycler"
         tools:listitem="@layout/item_subject_list"
-
-
-        app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
+        />
 
     <LinearLayout
         android:visibility="invisible"
@@ -75,9 +47,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="70dp"
-
         >
-
 
         <TextView
             android:textSize="30sp"
@@ -86,6 +56,7 @@
             android:layout_height="wrap_content"
             android:text="@string/help"
             />
+
     </LinearLayout>
 
     <eightbitlab.com.blurview.BlurView
@@ -93,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="0dp" />
-
+        tools:layout_editor_absoluteY="0dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

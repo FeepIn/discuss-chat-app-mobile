@@ -7,12 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import fr.feepin.justchat.R
 
-public class SubjectsFragment : Fragment(){
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+public class SubjectsFragment : Fragment(R.layout.fragment_subjects){
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_subjects, container, false)
-    }
 }

@@ -7,11 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity(R.layout.activity_main){
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-        setContentView(R.layout.activity_main)
-        NavigationUI.setupActionBarWithNavController(this, findNavController(R.id.nav_host_fragment))
+    init {
+
     }
+
 }

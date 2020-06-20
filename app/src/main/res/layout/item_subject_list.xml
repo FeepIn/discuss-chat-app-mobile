@@ -19,9 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:src="@drawable/space"
-
         />
-
 
     <TextView
         android:id="@+id/subject"
@@ -34,7 +32,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <LinearLayout
         android:layout_marginStart="12dp"
@@ -45,6 +44,7 @@
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
@@ -64,13 +64,14 @@
 
     <ImageView
         android:contentDescription="@string/heart_icon"
-        android:id="@+id/heart"
+        android:id="@+id/heartIcon"
         android:padding="12dp"
         android:layout_width="49dp"
         android:layout_height="49dp"
         android:tint="@color/red"
         android:src="@drawable/liked_heart_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
